@@ -1,0 +1,14 @@
+{
+    "name": "startina/time",
+    "description": "常用时间函数，支持时区",
+    "version": "0.0.1",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "startina\\time\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.1"
+    }
+}
