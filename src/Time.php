@@ -10,7 +10,7 @@ class Time
      * @param null|string $utc 时区
      * @return false|string
      */
-    public function date(string $format, ?int $timestamp = null, $timezone = null)
+    public function date(string $format, ?int $timestamp = null, ?string $timezone = null)
     {
         $timestamp = $timestamp ?? time();
         $timeTrans = $timestamp - $this->getTimezoneOffset($timezone);
@@ -19,10 +19,10 @@ class Time
 
     /**
      * 获取现有时区 - 指定时区的时间差（s）
-     * @param null|int|string $timezone 时区
+     * @param string|null $timezone 时区
      * @return int
      */
-    public function getTimezoneOffset($timezone = null)
+    public function getTimezoneOffset(?string $timezone = null)
     {
         if (!$timezone) {
             $timezone = date_default_timezone_get();
@@ -34,10 +34,10 @@ class Time
      * strtotime 拓展。支持时区
      * @param string $time 被解析的字符串，格式根据 GNU » 日期输入格式 的语法
      * @param int|null $now  用来计算返回值的时间戳
-     * @param null|int|null $timezone 指定时区
+     * @param null|string $timezone 指定时区
      * @return false|int
      */
-    public function strtotime(string $time, ?int $now = null, $timezone = null)
+    public function strtotime(string $time, ?int $now = null, ?string $timezone = null)
     {
         $now = $now ?? time();
         return strtotime($time, $now) + $this->getTimezoneOffset($timezone);
@@ -50,10 +50,10 @@ class Time
     /**
      * 获取指定时区X日开始和结束的时间戳
      * @param int|null $days  0:今日 +1:明天 -1：昨天 其它类推
-     * @param string|int|null $timezone
+     * @param string|null $timezone
      * @return array
      */
-    public function day(?int $days = 0, $timezone = null)
+    public function day(?int $days = 0, ?string $timezone = null)
     {
         $timestamp = $this->strtotime("+{$days} day");
         $start = $this->strtotime($this->date('Y-m-d', $timestamp, $timezone), $timestamp, $timezone);
@@ -63,30 +63,30 @@ class Time
 
     /**
      * 获取指定时区今日开始和结束的时间戳
-     * @param null|int|string $timezone 时区
+     * @param string|null $timezone 时区
      * @return array [开始，结束]
      */
-    public function today($timezone = null)
+    public function today(?string $timezone = null)
     {
         return  $this->day(0, $timezone);
     }
 
     /**
      * 获取指定时区昨日开始和结束的时间戳
-     * @param null|int|string $timezone 时区
+     * @param string|null $timezone 时区
      * @return array [开始，结束]
      */
-    public function yesterday($timezone = null)
+    public function yesterday(?string $timezone = null)
     {
         return $this->day(-1, $timezone);
     }
 
     /**
      * 获取指定时区昨日开始和结束的时间戳
-     * @param null|int|string $timezone 时区
+     * @param string|null $timezone 时区
      * @return array [开始，结束]
      */
-    public function tomorrow($timezone = null)
+    public function tomorrow(?string $timezone = null)
     {
         return $this->day(1, $timezone);
     }
@@ -98,10 +98,10 @@ class Time
     /**
      * 获取指定时区X周开始和结束的时间戳
      * @param int|null $days  0:本周 +1:下周 -1：上周 其它类推
-     * @param null|int|string $timezone
+     * @param string|null $timezone
      * @return array
      */
-    public function week(?int $weeks = 0, $timezone = null)
+    public function week(?int $weeks = 0, ?string $timezone = null)
     {
         $timestamp = $this->strtotime("{$weeks} week");
         $w = $this->date('w', $timestamp, $timezone);
@@ -112,30 +112,30 @@ class Time
 
     /**
      * 获取指定时区今周开始和结束的时间戳
-     * @param null|int|string $timezone 时区
+     * @param string|null $timezone 时区
      * @return array [开始，结束]
      */
-    public function thisWeek($timezone = null)
+    public function thisWeek(?string $timezone = null)
     {
         return $this->week(0, $timezone);
     }
 
     /**
      * 获取指定时区上周开始和结束的时间戳
-     * @param null|int|string $timezone 时区
+     * @param string|null $timezone 时区
      * @return array [开始，结束]
      */
-    public function lastWeek($timezone = null)
+    public function lastWeek(?string $timezone = null)
     {
         return $this->week(-1, $timezone);
     }
 
     /**
      * 获取指定时区上周开始和结束的时间戳
-     * @param null|int|string $timezone 时区
+     * @param string|null $timezone 时区
      * @return array [开始，结束]
      */
-    public function nextWeek($timezone = null)
+    public function nextWeek(?string $timezone = null)
     {
         return $this->week(1, $timezone);
     }
@@ -147,10 +147,10 @@ class Time
     /**
      * 获取指定时区X周开始和结束的时间戳
      * @param int|null $days  0:本周 +1:下周 -1：上周 其它类推
-     * @param null|int|string $timezone
+     * @param string|null $timezone
      * @return array
      */
-    public function month(?int $months = 0, $timezone = null)
+    public function month(?int $months = 0, ?string $timezone = null)
     {
         $timestamp = $months? $this->strtotime("{$months} month"): time();
         $start = $this->strtotime($this->date('Y-m', $timestamp, $timezone), $timestamp, $timezone);
@@ -159,40 +159,40 @@ class Time
     }
     /**
      * 获取指定时区这个月开始和结束的时间戳
-     * @param null|int|string $timezone 时区
+     * @param string|null $timezone 时区
      * @return array [开始，结束]
      */
-    public function thisMonth($timezone = null)
+    public function thisMonth(?string $timezone = null)
     {
         return $this->month(0, $timezone);
     }
 
     /**
      * 获取指定时区上个月开始和结束的时间戳
-     * @param null|int|string $timezone 时区
+     * @param string|null $timezone 时区
      * @return array [开始，结束]
      */
-    public function lastMonth($timezone = null)
+    public function lastMonth(?string $timezone = null)
     {
         return $this->month(-1, $timezone);
     }
 
     /**
      * 获取指定时区下个月开始和结束的时间戳
-     * @param null|int|string $timezone 时区
+     * @param string|null $timezone 时区
      * @return array [开始，结束]
      */
-    public function nextMonth($timezone = null)
+    public function nextMonth(?string $timezone = null)
     {
         return $this->month(1, $timezone);
     }
 
     /**
      * 获取指定时区今年开始和结束的时间戳
-     * @param null|int|string $timezone 时区
+     * @param string|null $timezone 时区
      * @return array [开始，结束]
      */
-    public function year($timezone = null)
+    public function year(?string $timezone = null)
     {
         $start = $this->strtotime($this->date('Y-1-1', time(), $timezone), time(), $timezone);
         $end = $this->strtotime($this->date('Y-1-1', $this->strtotime('next year', time(), $timezone), $timezone), time(), $timezone) - 1;
@@ -201,10 +201,10 @@ class Time
 
     /**
      * 获取指定时区去年开始和结束的时间戳
-     * @param null|int|string $timezone 时区
+     * @param string|null $timezone 时区
      * @return array [开始，结束]
      */
-    public function lastYear($timezone = null)
+    public function lastYear(?string $timezone = null)
     {
         $start = $this->strtotime($this->date('Y-1-1', $this->strtotime('last year', time(), $timezone), $timezone), time(), $timezone);
         $end = $this->strtotime($this->date('Y-1-1', $this->strtotime('this year', time(), $timezone), $timezone), time(), $timezone) - 1;
