@@ -1,5 +1,5 @@
 <?php
-namespace startina\time;
+namespace Startina;
 
 class Time
 {
